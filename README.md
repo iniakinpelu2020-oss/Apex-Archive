@@ -1,37 +1,33 @@
 # Apex Archive
 
-Bookmarks and read-it-later, with the full text saved so links stop rotting.
+Bookmarks and read-it-later for ApexOS. Vanilla HTML/CSS/JS, no build step, relative `./` paths so
+it also runs from `/apps/archive/` inside the ApexOS bundle.
 
-**Status: not built.**
+## Run
 
-## What it should do
+```sh
+python3 -m http.server 8080
+# then open http://127.0.0.1:8080/
+```
 
-- Save a URL from the phone's share sheet.
-- Keep a readable copy of the text, so a deleted page is still readable.
-- Full-text search over everything you saved.
+## Controls
 
-## The constraint that shapes it
+| control | what it does |
+|---|---|
+| Save link | Normalises the URL (adds `https://`), de-duplicates, and saves it as unread |
+| Unread / All / Read | Filters the list; counts sit next to each tab |
+| Search | Matches title, URL and tag |
+| Read / Unread | Toggles an item; opening a link also marks it read |
+| Export | Downloads every item as JSON |
+| Import | Merges an Apex Archive JSON export, skipping URLs already saved |
 
-Saving the text needs a fetch from a server, because most pages block a browser fetch with
-CORS. Cloudflare Workers can do that fetch, and 100,000 requests a day is generous for one
-person. Extraction (Readability) runs fine in a Worker.
+## Storage
 
-Firestore stores the extracted text; keep it to text, not screenshots, or 1 GiB fills up
-surprisingly fast.
+`localStorage` key `apex.archive.v1`, an array of
+`{ id, url, title, tag, read, saved }`. Titles are not fetched from the network, because doing so
+would leak every saved URL to the page's origin; the host name is shown instead until you type one.
 
-## What to build, in order
+## Bundling into ApexOS
 
-1. Save a URL, extract the text, show it in a clean reader view.
-2. Search across saved text.
-3. Tags and a "read later" queue.
-4. An import from browser bookmarks (the HTML export file).
-
-## What you need to do
-
-1. Nothing new.
-
-## First three steps
-
-1. A Worker route that takes a URL and returns extracted text.
-2. A list view with search.
-3. A share target in the Android app that posts the current page.
+Roster entry `Apex-Archive archive`. Keep paths relative, and bump `CACHE` in `sw.js`
+(`apex-archive-v1`) whenever shell files change.
