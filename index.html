@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Apex Archive</title>
+<meta name="description" content="Bookmarks and read-it-later for ApexOS, stored on this device.">
+<meta name="theme-color" content="#080a12">
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" href="./icons/icon-192.png">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<header class="bar">
+  <div class="brand">
+    <img src="./icons/icon-192.png" alt="" width="28" height="28">
+    <span>Apex Archive</span>
+  </div>
+  <div class="tools">
+    <input id="search" type="search" placeholder="Search titles, URLs, tags" autocomplete="off" aria-label="Search saved links">
+    <button id="exportBtn" type="button">Export</button>
+    <button id="importBtn" type="button">Import</button>
+    <input id="importFile" type="file" accept="application/json,.json" hidden>
+  </div>
+</header>
+
+<form id="addForm" class="add" autocomplete="off">
+  <input id="url" name="url" type="text" inputmode="url" placeholder="https://example.com/article" required aria-label="URL to save">
+  <input id="label" name="label" type="text" placeholder="Title (optional)" aria-label="Title">
+  <input id="tag" name="tag" type="text" placeholder="tag" aria-label="Tag" class="tag">
+  <button class="primary" type="submit">Save link</button>
+</form>
+
+<nav class="tabs" role="tablist" aria-label="Filter">
+  <button role="tab" data-filter="unread" aria-selected="true" type="button">Unread <span id="cUnread">0</span></button>
+  <button role="tab" data-filter="all" aria-selected="false" type="button">All <span id="cAll">0</span></button>
+  <button role="tab" data-filter="read" aria-selected="false" type="button">Read <span id="cRead">0</span></button>
+</nav>
+
+<main>
+  <ul id="list" class="list"></ul>
+  <p id="empty" class="empty" hidden>Nothing saved here yet. Paste a link above to start.</p>
+</main>
+
+<div class="toast" id="toast" hidden></div>
+<script src="./app.js"></script>
+</body>
+</html>
